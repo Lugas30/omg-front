@@ -4,23 +4,11 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 export const Contact = ({ baseUrl }) => {
-  const [data, setData] = useState({
-    link_wa: "",
-    email: "",
-    office1: "",
-    office2: "",
-    office3: "",
-    insta: "",
-    location: "",
-  });
+  const [data, setData] = useState({});
 
   useEffect(() => {
-    axios.get(`${baseUrl}/contact`).then((res) => {
-      console.log(res.data);
-      setData(res.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
+    axios.get(`${baseUrl}/contacts`).then((res) => {
+      setData(res.data.data);
     });
   }, [baseUrl]);
 
@@ -33,10 +21,8 @@ export const Contact = ({ baseUrl }) => {
             <p className="text-sm mb-8">
               We look forward to collaborating and thriving with you.
             </p>
-            <a href={data.link_wa}>
-            <button className="btn btn-success">
-            Consult with us
-            </button>
+            <a href={`https://api.whatsapp.com/send?phone=${data.phone}`}>
+              <button className="btn btn-success">Consult with us</button>
             </a>
           </div>
 
@@ -49,14 +35,13 @@ export const Contact = ({ baseUrl }) => {
               <p className="font-bold mt-3 text-2xl">{data.email}</p>
             </div>
             <div className="text-left sm:text-right md:text-right xl:text-right">
-            <a href={data.location}>
-            <h3 className="font-bold text-base">Our office</h3>
-              <p className="mt-3 text-sm">
-                {data.office1} <br />
-                {data.office2} <br />
-                {data.office3} <br />
-              </p>
-            </a>
+              <a href={data.location}>
+                <h3 className="font-bold text-base">Our office</h3>
+                <p
+                  className="mt-3 text-sm"
+                  dangerouslySetInnerHTML={{ __html: data.address }}
+                ></p>
+              </a>
             </div>
           </div>
         </div>

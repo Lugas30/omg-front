@@ -4,22 +4,20 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-export const Work = ({ baseUrl }) => {
+export const Work = ({ baseUrl, baseImg }) => {
   const [work, setWork] = useState([]);
 
   useEffect(() => {
-    axios.get(`${baseUrl}/work`).then((res) => {
-      setWork(res.data);
+    axios.get(`${baseUrl}/works`).then((res) => {
+      setWork(res.data.data);
     });
   }, [baseUrl]);
-
 
   // Sortir data berdasarkan ID secara menurun (Agar yang terbaru selalu diatas)
   const sortedData = work.sort((a, b) => b.id - a.id);
 
   // Ambil data pertama sebagai data yang ingin ditampilkan
   const item = sortedData[0];
-
 
   return (
     <Layout>
@@ -31,23 +29,26 @@ export const Work = ({ baseUrl }) => {
               <React.Fragment>
                 <div className="grid mb-20 relative grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
                   <div className="portfolio-image">
-                    <Link to={`/work/${item.id}`}>
+                    <Link to={`/work/${item.slug}`}>
                       <img
                         className="w-screen"
-                        src={`assets/image/${item.img_thumb}`}
-                        alt="ini gambar Portfolio"
+                        src={`${baseImg}/${item.thumbnail}`}
+                        alt={item.title}
                       />
                     </Link>
                   </div>
 
-                  <Link className="relative m-0" to={`/work/${item.id}`}>
+                  <Link className="relative m-0" to={`/work/${item.slug}`}>
                     <div className="relative sm:relative md:absolute xl:absolute w-full top-1/2 -translate-y-1/2">
                       <div className="card rounded-none max-w-100 bg-base-100 shadow-2xl -left-0 sm:-left-0 md:-left-10 xl:-left-10">
                         <div className="card-body">
                           <h3 className="card-title pb-5">{item.title}</h3>
-                          <p className="text-sm text-slate-500 line-clamp-3">
-                            {item.description}
-                          </p>
+                          <p
+                            className="text-sm text-slate-500 line-clamp-3"
+                            dangerouslySetInnerHTML={{
+                              __html: item.description,
+                            }}
+                          ></p>
                         </div>
                       </div>
                     </div>
@@ -57,25 +58,28 @@ export const Work = ({ baseUrl }) => {
             ) : (
               <React.Fragment>
                 <div className="grid mb-20 relative grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
-                  <Link className="relative m-0" to={`/work/${item.id}`}>
+                  <Link className="relative m-0" to={`/work/${item.slug}`}>
                     <div className="relative sm:relative md:absolute xl:absolute w-full top-1/2 -translate-y-1/2">
                       <div className="card rounded-none max-w-100 bg-base-100 shadow-2xl -right-0 sm:-right-0 md:-right-10 xl:-right-10">
                         <div className="card-body">
                           <h3 className="card-title pb-5">{item.title}</h3>
-                          <p className="text-sm text-slate-500 line-clamp-3">
-                            {item.description}
-                          </p>
+                          <p
+                            className="text-sm text-slate-500 line-clamp-3"
+                            dangerouslySetInnerHTML={{
+                              __html: item.description,
+                            }}
+                          ></p>
                         </div>
                       </div>
                     </div>
                   </Link>
 
                   <div className="portfolio-image order-first sm:order-first md:order-last xl:order-last">
-                    <Link to={`/work/${item.id}`}>
+                    <Link to={`/work/${item.slug}`}>
                       <img
                         className="w-screen"
-                        src={`assets/image/${item.img_thumb}`}
-                        alt="ini gambar Portfolio"
+                        src={`${baseImg}/${item.thumbnail}`}
+                        alt={item.title}
                       />
                     </Link>
                   </div>
